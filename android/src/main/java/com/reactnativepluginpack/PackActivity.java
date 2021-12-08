@@ -8,29 +8,18 @@ import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.facebook.react.ReactActivity;
+import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.ReactMarker;
 import com.facebook.react.bridge.ReactMarkerConstants;
-import com.facebook.react.common.JavascriptException;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 
 public class PackActivity extends ReactActivity {
   public PackActivityDelegate mDelegate = createReactActivityDelegate();
@@ -158,6 +147,12 @@ public class PackActivity extends ReactActivity {
       mDelegate = new PackActivityDelegate(this, getMainComponentName(), getJSBundleFile());
     }
     return mDelegate;
+  }
+
+  protected ReactRootView createRootView() {
+    Log.w("PackActivity", "createRootView");
+    ReactRootView reactRootView = new RNGestureHandlerEnabledRootView(this);
+    return reactRootView;
   }
 
   @Override
@@ -300,7 +295,7 @@ public class PackActivity extends ReactActivity {
           // }
           // 提示错误信息
           Toast.makeText(getApplicationContext(), "模块运行异常" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-           finish();
+          finish();
         }
       });
 
@@ -340,7 +335,7 @@ public class PackActivity extends ReactActivity {
   protected void onDestroy() {
     super.onDestroy();
     // 异常捕获重置
-    if(originalHandler !=null) {
+    if (originalHandler != null) {
       Thread.setDefaultUncaughtExceptionHandler(originalHandler);
     }
   }

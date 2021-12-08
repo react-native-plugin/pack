@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.JSIModulePackage;
-import com.facebook.react.bridge.ReactContext;
 
 /**
  * PackActivityDelegate
@@ -84,11 +82,17 @@ public class PackActivityDelegate extends ReactActivityDelegate {
     return null;
   }
 
-//  @Override
-//  protected ReactRootView createRootView() {
-//    Log.w("PackActivityDelegate", "createRootView");
-//    return new RNGestureHandlerEnabledRootView(mActivity);
-//  }
+  @Override
+  protected ReactRootView createRootView() {
+    Log.w("PackActivityDelegate", "createRootView");
+    ReactRootView reactRootView = null;
+    if (mActivity instanceof PackActivity) {
+      reactRootView = ((PackActivity) mActivity).createRootView();
+    } else {
+      reactRootView = super.createRootView();
+    }
+    return reactRootView;
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -152,8 +156,7 @@ public class PackActivityDelegate extends ReactActivityDelegate {
       }
 
       @Override
-      protected @Nullable
-      JSIModulePackage getJSIModulePackage() {
+      protected JSIModulePackage getJSIModulePackage() {
         JSIModulePackage jsiModulePackage = PackPackage.getJsiModulePackage();
         if (jsiModulePackage != null) {
           return jsiModulePackage;
@@ -161,8 +164,7 @@ public class PackActivityDelegate extends ReactActivityDelegate {
         return null;
       }
 
-      @Override
-      protected @Nullable
+      @Override protected @Nullable
       String getJSBundleFile() {
         String bundleFile = ((PackActivity) getPlainActivity()).getJSBundleFile();
         Log.w("ReactNativeHost", "getReactNativeHost getJSBundleFile " + bundleFile);
