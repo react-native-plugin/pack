@@ -88,11 +88,11 @@ public class PackUtil {
           Log.i("DOWNLOAD", "download success ");
         } catch (IOException e) {
           Log.i("DOWNLOAD", "download failed IOException " + e.getMessage());
-          e.printStackTrace();
+          // e.printStackTrace();
           listener.onDownloadFailed(e);
         } catch (Exception e) {
           Log.i("DOWNLOAD", "download failed Exception " + e.getMessage());
-          e.printStackTrace();
+          // e.printStackTrace();
           listener.onDownloadFailed(e);
         } finally {
           try {
