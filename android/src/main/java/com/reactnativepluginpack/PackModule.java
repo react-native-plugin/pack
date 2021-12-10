@@ -118,4 +118,29 @@ public class PackModule extends ReactContextBaseJavaModule {
     packActivity.finishActivity();
   }
 
+  /**
+   * 触发监听数据
+   * 发送给主框架
+   */
+  @ReactMethod
+  public void emit(String eventName, String rMap) {
+    _emit(eventName, rMap);
+  }
+
+  @ReactMethod
+  public void emit(String eventName, ReadableMap readableMap) {
+    WritableMap map = Arguments.createMap();
+    map.merge(readableMap);
+    _emit(eventName, map);
+  }
+  private void _emit(String eventName, Object obj) {
+    try {
+      Log.w("PackActivity", "emit sendEvent sss:" + eventName + "  " + obj.toString());
+      ((ReactApplication) this.getCurrentActivity().getApplication()).getReactNativeHost().getReactInstanceManager().getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit(eventName, obj);
+      Log.w("PackActivity", "emit sendEvent eee:" + eventName);
+    } catch (Exception e) {
+      Log.w("PackActivity", "emit error " + e.getMessage());
+    }
+  }
 }
